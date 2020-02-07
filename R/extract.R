@@ -112,8 +112,10 @@ extract_filter_where_comparison_value <- function(where){
   right <- where$Condition$Comparison$Right$Literal[["Value"]]
 
   dplyr::case_when(
-    comparison_kind == 4 ~ paste("<=", right),
+    comparison_kind == 1 ~ paste(">", left),
+    comparison_kind == 2 ~ paste(">=", left),
     comparison_kind == 3 ~ paste("<", right),
+    comparison_kind == 4 ~ paste("<=", right),
     TRUE ~ "NA"
   )
 
