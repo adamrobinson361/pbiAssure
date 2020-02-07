@@ -6,6 +6,9 @@
 \usage{
 extract_entity_measures(entity)
 }
+\arguments{
+\item{entity}{A measures entity in a Power BI list}
+}
 \value{
 tibble
 }

@@ -6,6 +6,9 @@
 \usage{
 extract_extensions_measures(modelExtensions)
 }
+\arguments{
+\item{modelExtensions}{A model extension in a Power BI report list}
+}
 \value{
 tibble
 }

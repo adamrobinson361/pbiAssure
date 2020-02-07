@@ -7,7 +7,7 @@
 extract_filter_where_comparison_value(where)
 }
 \arguments{
-\item{where_element}{A where in element in Power BI list}
+\item{where}{A where in element in Power BI list}
 }
 \value{
 tibble

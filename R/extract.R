@@ -3,7 +3,7 @@
 
 #' Extract details of an individual power bi measure
 #
-#' @param measure
+#' @param measure A measure element in a Power BI list
 #' @return tibble
 #' @keywords measure, extract
 #' @examples
@@ -18,7 +18,7 @@ extract_measure <- function(measure){
 
 #' Extract an individual measure from an individual entity (table) within a power bi report list.
 #
-#' @param entity
+#' @param entity A measures entity in a Power BI list
 #' @return tibble
 #' @keywords measures, extract
 #' @examples
@@ -42,7 +42,7 @@ extract_entity_measures <- function(entity){
 
 #' Extract all measures associated with all model extensions.
 #
-#' @param modelExtensions
+#' @param modelExtensions A model extension in a Power BI report list
 #' @return tibble
 #' @keywords measures, extract
 #' @examples
@@ -79,7 +79,7 @@ create_measures_summary <- function(report){
 
 #' Extract value from where in filter in Power BI list
 #
-#' @param where_element A where in element in Power BI list
+#' @param where A where in element in Power BI list
 #' @return tibble
 #' @keywords filters, extract
 #' @examples
@@ -96,7 +96,7 @@ extract_filter_where_in_value <- function(where){
 
 #' Extract value from where comparisson filter in Power BI list
 #
-#' @param where_element A where in element in Power BI list
+#' @param where A where in element in Power BI list
 #' @return tibble
 #' @keywords filters, extract
 #' @examples

@@ -6,6 +6,9 @@
 \usage{
 extract_measure(measure)
 }
+\arguments{
+\item{measure}{A measure element in a Power BI list}
+}
 \value{
 tibble
 }

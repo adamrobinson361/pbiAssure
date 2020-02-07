@@ -6,6 +6,9 @@
 \usage{
 if_null_na(x)
 }
+\arguments{
+\item{x}{A character vector}
+}
 \value{
 character
 }

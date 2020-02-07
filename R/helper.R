@@ -1,6 +1,6 @@
 #' Helper function hat converts nulls to NA.
 #
-#' @param x
+#' @param x A character vector
 #' @return character
 #' @keywords helper, null, na
 #' @examples
