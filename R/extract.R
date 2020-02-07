@@ -136,7 +136,7 @@ extract_filter <- function(filters_element){
 
     if (condition_type == "In") {
 
-      data_frame(
+      tibble::data_frame(
         filter_table = if_null_na(filters_element$filter$From[[1]]["Entity"]),
         filter_column = if_null_na(filters_element$filter$Where[[1]]$Condition$In$Expressions[[1]]$Column$Property),
         filter_value =  if_null_na(extract_filter_where_in_value(filters_element$filter$Where[[1]]))
