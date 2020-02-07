@@ -15,4 +15,5 @@ Imports:
     openxlsx,
     RJSONIO,
     magrittr,
-    dplyr
+    dplyr,
+    zip

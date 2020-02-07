@@ -4,10 +4,12 @@
 \alias{create_qa_report}
 \title{Create quality assurance report from Power BI list}
 \usage{
-create_qa_report(report, file = "pbi_qa_report.xlsx")
+create_qa_report(report, output_file = "pbi_qa_report.xlsx")
 }
 \arguments{
 \item{report}{A Power BI report list read in using read_pbi or read_layout}
+
+\item{output_file}{Output file path.}
 }
 \value{
 xlsx

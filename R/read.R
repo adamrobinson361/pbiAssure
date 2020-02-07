@@ -38,7 +38,7 @@ read_pbi <- function(file){
 
   unzip_folder_path <- file.path(temp_dir, unzip_folder_name)
 
-  unzip(file, exdir = unzip_folder_path)
+  zip::unzip(file, exdir = unzip_folder_path)
 
   read_layout(file.path(unzip_folder_path, "report/Layout"))
 

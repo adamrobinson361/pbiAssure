@@ -302,7 +302,8 @@ extract_section_visuals <- function(section){
 #' }
 create_visuals_summary <- function(report){
 
-  lapply(report$sections, function(x){extract_section_visuals(x$visualContainers) %>% transmute(slide_name = x$displayName, visual_id, visual_type, visual_title, visual_filters)}) %>%
+  lapply(report$sections, function(x){extract_section_visuals(x$visualContainers) %>%
+    dplyr::transmute(slide_name = x$displayName, visual_id, visual_type, visual_title, visual_filters)}) %>%
     dplyr::bind_rows()
 
 }
