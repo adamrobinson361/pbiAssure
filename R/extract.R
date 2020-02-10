@@ -312,5 +312,52 @@ create_visuals_summary <- function(report){
 
 }
 
+# Values ------------------------------------------------------------------
 
+extract_pivot_table <- function(visual){
 
+  config_json <- visual$config %>%
+    jsonlite::fromJSON(flatten = TRUE)
+
+  if (!is.null(config_json$singleVisual$projections[["Rows"]])){
+
+    rows <- config_json$singleVisual$projections$Rows %>%
+      mutate(queryRef = paste0("[", gsub("\\.", "].[", queryRef), "]")) %>%
+      mutate(queryRef = paste0(queryRef, " - (", ifelse(active, "Active", "Not Active"), ")")) %>%
+      select(queryRef) %>%
+      paste(collapse = ",")
+
+  } else {
+
+    rows <- NA
+
+  }
+
+  if (!is.null(config_json$singleVisual$projections[["Columns"]])){
+
+    columns <- config_json$singleVisual$projections$Columns %>%
+      mutate(queryRef = paste0("[", gsub("\\.", "].[", queryRef), "]")) %>%
+      select(queryRef) %>%
+      paste(collapse = ",")
+
+  } else {
+
+    columns <- NA
+
+  }
+
+  if (!is.null(config_json$singleVisual$projections[["Values"]])){
+
+  values <- config_json$singleVisual$projections$Values %>%
+    mutate(queryRef = paste0("[", gsub("\\.", "].[", queryRef), "]")) %>%
+    paste(collapse = ",")
+
+  } else {
+
+    values <- NA
+
+  }
+
+  paste0("rows = ", rows, ", columns = ", columns, ", values = ", values)
+
+}
