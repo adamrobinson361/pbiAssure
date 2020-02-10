@@ -179,7 +179,9 @@ extract_filter <- function(filters_element){
 #' }
 extract_filters <- function(object){
 
-  if (object$filters == "[]") {
+  if (is.null(object[["filters"]])){
+    NA
+  } else if (object$filters == "[]") {
     NA
   } else {
 
