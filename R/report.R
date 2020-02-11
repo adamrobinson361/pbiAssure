@@ -26,6 +26,7 @@ create_qa_report <- function(report, output_file = "pbi_qa_report.xlsx"){
   header_style <- openxlsx::createStyle(fgFill = "#4F81BD", halign = "left", textDecoration = "Bold", border = "TopBottomLeftRight", fontColour = "white", wrapText = TRUE)
   unlocked <- openxlsx::createStyle(locked = FALSE, border = "TopBottomLeftRight")
   grey <- openxlsx::createStyle(fgFill = "#f9f9f9", border = "TopBottomLeftRight")
+  grey_wrap <- openxlsx::createStyle(fgFill = "#f9f9f9", border = "TopBottomLeftRight", wrapText = TRUE)
 
   # Validation Tab
   openxlsx::addWorksheet(wb, "validation")
@@ -51,7 +52,6 @@ create_qa_report <- function(report, output_file = "pbi_qa_report.xlsx"){
 
   lapply(validation_cells_report_summary_final, function(x){openxlsx::dataValidation(wb, "report_summary", col = x, rows = 5:(nrow(report_summary) + 4), type = "list", value = "'validation'!$A$2:$A$4")})
   openxlsx::setColWidths(wb, "report_summary", cols = 1:ncol(report_summary), widths = "auto")
-  openxlsx::protectWorksheet(wb, "report_summary", protect = TRUE, lockFormattingCells = FALSE, lockFormattingColumns = FALSE, lockInsertingColumns = TRUE, lockDeletingColumns = TRUE)
   openxlsx::addStyle(wb, "report_summary", style = grey, col = 1:ncol_report_summary_init, rows = 5:(nrow(report_summary) + 4), gridExpand = TRUE)
   openxlsx::addStyle(wb, "report_summary", style = unlocked, col = (ncol_report_summary_init + 1):ncol(report_summary), rows = 5:(nrow(report_summary) + 4), gridExpand = TRUE)
   openxlsx::mergeCells(wb, "report_summary", cols = 1:2, rows = 3)
@@ -83,7 +83,6 @@ create_qa_report <- function(report, output_file = "pbi_qa_report.xlsx"){
 
  lapply(validation_cells_measures_summary_final, function(x){openxlsx::dataValidation(wb, "measures_summary", col = x, rows = 5:(nrow(measures_summary) + 4), type = "list", value = "'validation'!$A$2:$A$4")})
   openxlsx::setColWidths(wb, "measures_summary", cols = 1:ncol(measures_summary), widths = "auto")
-  openxlsx::protectWorksheet(wb, "measures_summary", protect = TRUE, lockFormattingCells = FALSE, lockFormattingColumns = FALSE, lockInsertingColumns = TRUE, lockDeletingColumns = TRUE)
   openxlsx::addStyle(wb, "measures_summary", style = grey, col = 1:ncol_measures_summary_init, rows = 5:(nrow(measures_summary) + 4), gridExpand = TRUE)
   openxlsx::addStyle(wb, "measures_summary", style = unlocked, col = (ncol_measures_summary_init + 1):ncol(measures_summary), rows = 5:(nrow(measures_summary) + 4), gridExpand = TRUE)
   openxlsx::mergeCells(wb, "measures_summary", cols = 1:3, rows = 3)
@@ -115,7 +114,6 @@ create_qa_report <- function(report, output_file = "pbi_qa_report.xlsx"){
 
   lapply(validation_cells_sections_summary_final, function(x){openxlsx::dataValidation(wb, "sections_summary", col = x, rows = 5:(nrow(sections_summary) + 4), type = "list", value = "'validation'!$A$2:$A$4")})
   openxlsx::setColWidths(wb, "sections_summary", cols = 1:ncol(sections_summary), widths = "auto")
-  openxlsx::protectWorksheet(wb, "sections_summary", protect = TRUE, lockFormattingCells = FALSE, lockFormattingColumns = FALSE, lockInsertingColumns = TRUE, lockDeletingColumns = TRUE)
   openxlsx::addStyle(wb, "sections_summary", style = grey, col = 1:ncol_sections_summary_init, rows = 5:(nrow(sections_summary) + 4), gridExpand = TRUE)
   openxlsx::addStyle(wb, "sections_summary", style = unlocked, col = (ncol_sections_summary_init + 1):ncol(sections_summary), rows = 5:(nrow(sections_summary) + 4), gridExpand = TRUE)
   openxlsx::mergeCells(wb, "sections_summary", cols = 1:2, rows = 3)
@@ -135,7 +133,6 @@ create_qa_report <- function(report, output_file = "pbi_qa_report.xlsx"){
   ncol_visuals_summary_init <- ncol(visuals_summary)
 
   visuals_summary <- visuals_summary %>%
-    dplyr::filter(!(visual_type %in% c("textbox", "image", "slicer", "basicShape", "actionButton"))) %>%
     dplyr::group_by(visual_title) %>%
     dplyr::mutate(
       visual_title_duplicate = ifelse(sum(!is.na(visual_title), na.rm = TRUE) > 1, 1, 0)
@@ -153,15 +150,16 @@ create_qa_report <- function(report, output_file = "pbi_qa_report.xlsx"){
 
   lapply(validation_cells_visuals_summary_final, function(x){openxlsx::dataValidation(wb, "visuals_summary", col = x, rows = 5:(nrow(visuals_summary) + 4), type = "list", value = "'validation'!$A$2:$A$4")})
   openxlsx::setColWidths(wb, "visuals_summary", cols = 1:ncol(visuals_summary), widths = "auto")
-  openxlsx::protectWorksheet(wb, "visuals_summary", protect = TRUE, lockFormattingCells = FALSE, lockFormattingColumns = FALSE, lockInsertingColumns = TRUE, lockDeletingColumns = TRUE)
-  openxlsx::addStyle(wb, "visuals_summary", style = grey, col = 1:ncol_visuals_summary_init, rows = 5:(nrow(visuals_summary) + 4), gridExpand = TRUE)
-  openxlsx::addStyle(wb, "visuals_summary", style = unlocked, col = (ncol_visuals_summary_init + 1):ncol(visuals_summary), rows = 5:(nrow(visuals_summary) + 4), gridExpand = TRUE)
-  openxlsx::mergeCells(wb, "visuals_summary", cols = 1:6, rows = 3)
-  openxlsx::mergeCells(wb, "visuals_summary", cols = 7:12, rows = 3)
-  openxlsx::mergeCells(wb, "visuals_summary", cols = 13:ncol(visuals_summary), rows = 3)
+  openxlsx::setColWidths(wb, "visuals_summary", cols = 4:6, widths = 100)
+  openxlsx::addStyle(wb, "visuals_summary", style = grey, col = 1:(ncol_visuals_summary_init + 1), rows = 5:(nrow(visuals_summary) + 4), gridExpand = TRUE)
+  openxlsx::addStyle(wb, "visuals_summary", style = grey_wrap, col = 4:6, rows = 5:(nrow(visuals_summary) + 4), gridExpand = TRUE)
+  openxlsx::addStyle(wb, "visuals_summary", style = unlocked, col = (ncol_visuals_summary_init + 2):ncol(visuals_summary), rows = 5:(nrow(visuals_summary) + 4), gridExpand = TRUE)
+  openxlsx::mergeCells(wb, "visuals_summary", cols = 1:7, rows = 3)
+  openxlsx::mergeCells(wb, "visuals_summary", cols = 8:13, rows = 3)
+  openxlsx::mergeCells(wb, "visuals_summary", cols = 14:ncol(visuals_summary), rows = 3)
   openxlsx::writeData(wb, "visuals_summary", "report_data", startCol = 1, startRow = 3)
-  openxlsx::writeData(wb, "visuals_summary", "report_owner_checks", startCol = 7, startRow = 3)
-  openxlsx::writeData(wb, "visuals_summary", "quality_assurer_checks", startCol = 13, startRow = 3)
+  openxlsx::writeData(wb, "visuals_summary", "report_owner_checks", startCol = 8, startRow = 3)
+  openxlsx::writeData(wb, "visuals_summary", "quality_assurer_checks", startCol = 14, startRow = 3)
   openxlsx::addStyle(wb, "visuals_summary", style = header_style, col = 1:ncol(visuals_summary), row = 3, gridExpand = TRUE)
 
   # Clean up

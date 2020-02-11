@@ -273,6 +273,7 @@ extract_single_visual <- function(single_visual){
     visual_id = config_json$name,
     visual_type = config_json$singleVisual$`visualType`,
     visual_title = if_null_na(config_json$singleVisual$vcObjects$title[[1]]$properties$text$expr$Literal["Value"]),
+    visual_value = if_null_na(extract_textbox(single_visual)),
     visual_filters = extract_filters(single_visual)
     )
 
@@ -307,10 +308,37 @@ extract_section_visuals <- function(section){
 create_visuals_summary <- function(report){
 
   lapply(report$sections, function(x){extract_section_visuals(x$visualContainers) %>%
-    dplyr::transmute(slide_name = x$displayName, visual_id, visual_type, visual_title, visual_filters)}) %>%
-    dplyr::bind_rows()
+    dplyr::transmute(slide_name = x$displayName, visual_id, visual_type, visual_title, visual_value, visual_filters)}) %>%
+    dplyr::bind_rows() %>%
+    dplyr::filter(!(visual_type %in% c("image", "slicer", "basicShape", "actionButton")))
 
 }
 
+# Values ------------------------------------------------------------------
 
+#' Extract text from a text box visual
+#
+#' @param single_visual A visual container element in a Power BI list
+#' @return tibble
+#' @keywords text, visual, extract
+#' @examples
+#' \dontrun{
+#' pbiAssure:::extract_single_visual(report$sections[[3]]$visualContainers[[2]])
+#' }
+extract_textbox <- function(single_visual){
 
+  config_json <- RJSONIO::fromJSON(single_visual$config)
+
+  if (length(config_json[["singleVisual"]][["visualType"]]) > 0){
+
+    if (config_json$singleVisual$visualType == "textbox"){
+
+      paragraphs <- config_json$singleVisual$objects$general[[1]]$properties$paragraphs
+
+      lapply(paragraphs, function(x){x$textRuns[[1]][["value"]]}) %>%
+        paste(collapse = "\n")
+      }
+
+    }
+
+  }
