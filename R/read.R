@@ -13,9 +13,7 @@ read_layout <- function(file){
 
   file1 <- readLines(file, warn = FALSE, skipNul = TRUE)
 
-  file1 <- enc2utf8(file1)
-
-  RJSONIO::fromJSON(file1)
+  RJSONIO::fromJSON(file1, digits = 15)
 
 }
 
@@ -43,3 +41,4 @@ read_pbi <- function(file){
   read_layout(file.path(unzip_folder_path, "report/Layout"))
 
 }
+
