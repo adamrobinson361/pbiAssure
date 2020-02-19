@@ -145,7 +145,7 @@ extract_filter <- function(filters_element){
       ) %>%
         dplyr::filter(filter_value != "c()") %>%
         dplyr::mutate(
-          conc = paste0("[", filter_table, "].[", filter_column, "] in ", filter_value)
+          conc = paste0(filter_table, ".", filter_column, " in ", filter_value)
         ) %>%
         dplyr::filter(!is.na(filter_table))
 
@@ -158,7 +158,7 @@ extract_filter <- function(filters_element){
       ) %>%
         dplyr::filter(filter_value != "c()") %>%
         dplyr::mutate(
-          conc = paste0("[", filter_table, "].[", filter_column, "] ", filter_value)
+          conc = paste0(filter_table, ".", filter_column, " ", filter_value)
         ) %>%
         dplyr::filter(!is.na(filter_table))
 
@@ -273,7 +273,7 @@ extract_single_visual <- function(single_visual){
     visual_id = config_json$name,
     visual_type = config_json$singleVisual$`visualType`,
     visual_title = if_null_na(config_json$singleVisual$vcObjects$title[[1]]$properties$text$expr$Literal["Value"]),
-    visual_value = if_null_na(extract_textbox(single_visual)),
+    visual_value = if_null_na(extract_value(single_visual)),
     visual_filters = extract_filters(single_visual)
     )
 
@@ -341,4 +341,31 @@ extract_textbox <- function(single_visual){
 
     }
 
+}
+
+#' Extract value from a visual
+#
+#' @param single_visual A visual container element in a Power BI list
+#' @return tibble
+#' @keywords visual, extract
+#' @examples
+#' \dontrun{
+#' pbiAssure:::extract_value(report$sections[[3]]$visualContainers[[2]])
+#' }
+extract_value <- function(single_visual){
+
+  if (is.null(extract_textbox(single_visual))){
+
+    config_json <- RJSONIO::fromJSON(single_visual$config)
+
+    projections <- config_json$singleVisual$projections
+
+    paste(names(projections), "=", paste(projections), collapse = ",")
+
+  } else {
+
+    extract_textbox(single_visual)
+
   }
+
+}
