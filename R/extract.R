@@ -360,7 +360,7 @@ extract_value <- function(single_visual){
 
     projections <- config_json$singleVisual$projections
 
-    paste(names(projections), "=", paste(projections), collapse = ",")
+    paste(sort(names(projections)), "=", paste(projections[sort(names(projections))]), collapse = ",")
 
   } else {
 
