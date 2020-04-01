@@ -52,7 +52,7 @@ There are 4 summary functions. These are as follows:
 
 - `create_report_summary`
 
-- `create_sectinos_summary`
+- `create_sections_summary`
 
 - `create_visuals_summary`
 
