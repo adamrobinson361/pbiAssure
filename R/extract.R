@@ -307,9 +307,13 @@ extract_section_visuals <- function(section){
 #' }
 create_visuals_summary <- function(report){
 
-  lapply(report$sections, function(x){extract_section_visuals(x$visualContainers) %>%
-    dplyr::transmute(slide_name = x$displayName, visual_id, visual_type, visual_title, visual_value, visual_filters)}) %>%
+  dfs <- lapply(report$sections, function(x){extract_section_visuals(x$visualContainers) %>% dplyr::mutate(slide_name = x$displayName)})
+
+  dfs_no_null <- dfs[lapply(dfs,length)>0]
+
+  dfs_no_null %>%
     dplyr::bind_rows() %>%
+    dplyr::transmute(slide_name, visual_id, visual_type, visual_title, visual_value, visual_filters) %>%
     dplyr::filter(!(visual_type %in% c("image", "slicer", "basicShape", "actionButton")))
 
 }
