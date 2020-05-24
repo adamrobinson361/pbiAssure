@@ -70,8 +70,22 @@ create_measures_summary <- function(report){
 
   config_json <-  RJSONIO::fromJSON(report$config)
 
-  lapply(config_json$modelExtensions, extract_extensions_measures) %>%
+  measures_summary <- lapply(config_json$modelExtensions, extract_extensions_measures) %>%
     dplyr::bind_rows()
+
+  if (length(measures_summary) == 0) {
+
+    dplyr::tibble(
+      measure_base_table = NA,
+      measure_name = NA,
+      measure_code = NA
+    )
+
+  } else {
+
+    measures_summary
+
+  }
 
 }
 
