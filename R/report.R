@@ -70,10 +70,10 @@ create_qa_report <- function(report, output_file = "pbi_qa_report.xlsx"){
   openxlsx::writeData(wb, "report_summary", "quality_assurer_checks", startCol = 4, startRow = 3)
   openxlsx::writeData(wb, "report_summary", "report_owner_qa_comments_actioned_validation", startCol = 6, startRow = 3)
   openxlsx::addStyle(wb, "report_summary", style = header_style, col = 1:ncol(report_summary), row = 3, gridExpand = TRUE)
-  openxlsx::conditionalFormatting(wb, "report_summary", cols= c(4,6), rows = 5:(nrow(report_summary) + 4), type = "contains", rule = "Yes", style = green)
-  openxlsx::conditionalFormatting(wb, "report_summary", cols= c(4,6), rows = 5:(nrow(report_summary) + 4), type = "contains", rule = "No", style = red)
-  openxlsx::conditionalFormatting(wb, "report_summary", cols= c(4,6), rows = 5:(nrow(report_summary) + 4), type = "contains", rule = "N/A", style = grey)
 
+  lapply(validation_cells_report_summary_final, function(x){openxlsx::conditionalFormatting(wb, "report_summary", cols = x, rows = 5:(nrow(report_summary) + 4), type = "contains", rule = "Yes", style = green)})
+  lapply(validation_cells_report_summary_final, function(x){openxlsx::conditionalFormatting(wb, "report_summary", cols = x, rows = 5:(nrow(report_summary) + 4), type = "contains", rule = "No", style = red)})
+  lapply(validation_cells_report_summary_final, function(x){openxlsx::conditionalFormatting(wb, "report_summary", cols = x, rows = 5:(nrow(report_summary) + 4), type = "contains", rule = "N/A", style = grey)})
   openxlsx::freezePane(wb, "report_summary", firstActiveCol = 3)
 
   # Measures Summary
@@ -99,7 +99,7 @@ create_qa_report <- function(report, output_file = "pbi_qa_report.xlsx"){
   openxlsx::writeData(wb, "measures_summary", x = measures_summary, startRow = 4, headerStyle = header_style,
             borders = "all", borderStyle = "thin")
 
- lapply(validation_cells_measures_summary_final, function(x){openxlsx::dataValidation(wb, "measures_summary", col = x, rows = 5:(nrow(measures_summary) + 4), type = "list", value = "'validation'!$A$2:$A$4")})
+  lapply(validation_cells_measures_summary_final, function(x){openxlsx::dataValidation(wb, "measures_summary", col = x, rows = 5:(nrow(measures_summary) + 4), type = "list", value = "'validation'!$A$2:$A$4")})
   openxlsx::setColWidths(wb, "measures_summary", cols = 1:ncol(measures_summary), widths = "auto")
   openxlsx::setColWidths(wb, "measures_summary", cols = c(1, 5, 6, 7, 9), widths = 20)
   openxlsx::setColWidths(wb, "measures_summary", cols = c(2, 3, 4, 8, 10), widths = 40)
@@ -115,9 +115,9 @@ create_qa_report <- function(report, output_file = "pbi_qa_report.xlsx"){
   openxlsx::writeData(wb, "measures_summary", "quality_assurer_checks", startCol = 5, startRow = 3)
   openxlsx::writeData(wb, "measures_summary", "report_owner_qa_comments_actioned_validation", startCol = 9, startRow = 3)
   openxlsx::addStyle(wb, "measures_summary", style = header_style, col = 1:ncol(measures_summary), row = 3, gridExpand = TRUE)
-  openxlsx::conditionalFormatting(wb, "measures_summary", cols= c(5,6,7,9), rows = 5:(nrow(measures_summary) + 4), type = "contains", rule = "Yes", style = green)
-  openxlsx::conditionalFormatting(wb, "measures_summary", cols= c(5,6,7,9), rows = 5:(nrow(measures_summary) + 4), type = "contains", rule = "No", style = red)
-  openxlsx::conditionalFormatting(wb, "measures_summary", cols= c(5,6,7,9), rows = 5:(nrow(measures_summary) + 4), type = "contains", rule = "N/A", style = grey)
+  lapply(validation_cells_measures_summary_final, function(x){openxlsx::conditionalFormatting(wb, "measures_summary", cols= x, rows = 5:(nrow(measures_summary) + 4), type = "contains", rule = "Yes", style = green)})
+  lapply(validation_cells_measures_summary_final, function(x){openxlsx::conditionalFormatting(wb, "measures_summary", cols= x, rows = 5:(nrow(measures_summary) + 4), type = "contains", rule = "No", style = red)})
+  lapply(validation_cells_measures_summary_final, function(x){openxlsx::conditionalFormatting(wb, "measures_summary", cols= x, rows = 5:(nrow(measures_summary) + 4), type = "contains", rule = "N/A", style = grey)})
   openxlsx::freezePane(wb, "measures_summary", firstActiveCol = 4)
 
   # Section Summary
@@ -158,9 +158,9 @@ create_qa_report <- function(report, output_file = "pbi_qa_report.xlsx"){
   openxlsx::writeData(wb, "sections_summary", "quality_assurer_checks", startCol = 4, startRow = 3)
   openxlsx::writeData(wb, "sections_summary", "report_owner_qa_comments_actioned_validation", startCol = 7, startRow = 3)
   openxlsx::addStyle(wb, "sections_summary", style = header_style, col = 1:ncol(sections_summary), row = 3, gridExpand = TRUE)
-  openxlsx::conditionalFormatting(wb, "sections_summary", cols= c(4,5,7), rows = 5:(nrow(sections_summary) + 4), type = "contains", rule = "Yes", style = green)
-  openxlsx::conditionalFormatting(wb, "sections_summary", cols= c(4,5,7), rows = 5:(nrow(sections_summary) + 4), type = "contains", rule = "No", style = red)
-  openxlsx::conditionalFormatting(wb, "sections_summary", cols= c(4,5,7), rows = 5:(nrow(sections_summary) + 4), type = "contains", rule = "N/A", style = grey)
+  lapply(validation_cells_sections_summary_final, function(x){openxlsx::conditionalFormatting(wb, "sections_summary", cols= x, rows = 5:(nrow(sections_summary) + 4), type = "contains", rule = "Yes", style = green)})
+  lapply(validation_cells_sections_summary_final, function(x){openxlsx::conditionalFormatting(wb, "sections_summary", cols= x, rows = 5:(nrow(sections_summary) + 4), type = "contains", rule = "No", style = red)})
+  lapply(validation_cells_sections_summary_final, function(x){openxlsx::conditionalFormatting(wb, "sections_summary", cols= x, rows = 5:(nrow(sections_summary) + 4), type = "contains", rule = "N/A", style = grey)})
   openxlsx::freezePane(wb, "sections_summary", firstActiveCol = 3)
 
   # Visuals Summary
@@ -207,9 +207,9 @@ create_qa_report <- function(report, output_file = "pbi_qa_report.xlsx"){
   openxlsx::writeData(wb, "visuals_summary", "quality_assurer_checks", startCol = 9, startRow = 3)
   openxlsx::writeData(wb, "visuals_summary", "report_owner_qa_comments_actioned_validation", startCol = 14, startRow = 3)
   openxlsx::addStyle(wb, "visuals_summary", style = header_style, col = 1:ncol(visuals_summary), row = 3, gridExpand = TRUE)
-  openxlsx::conditionalFormatting(wb, "visuals_summary", cols= c(9:12, 14), rows = 5:(nrow(visuals_summary) + 4), type = "contains", rule = "Yes", style = green)
-  openxlsx::conditionalFormatting(wb, "visuals_summary", cols= c(9:12, 14), rows = 5:(nrow(visuals_summary) + 4), type = "contains", rule = "No", style = red)
-  openxlsx::conditionalFormatting(wb, "visuals_summary", cols= c(9:12, 14), rows = 5:(nrow(visuals_summary) + 4), type = "contains", rule = "N/A", style = grey)
+  lapply(validation_cells_visuals_summary_final, function(x){openxlsx::conditionalFormatting(wb, "visuals_summary", cols= x, rows = 5:(nrow(visuals_summary) + 4), type = "contains", rule = "Yes", style = green)})
+  lapply(validation_cells_visuals_summary_final, function(x){openxlsx::conditionalFormatting(wb, "visuals_summary", cols= x, rows = 5:(nrow(visuals_summary) + 4), type = "contains", rule = "No", style = red)})
+  lapply(validation_cells_visuals_summary_final, function(x){openxlsx::conditionalFormatting(wb, "visuals_summary", cols= x, rows = 5:(nrow(visuals_summary) + 4), type = "contains", rule = "N/A", style = grey)})
   openxlsx::freezePane(wb, "visuals_summary", firstActiveCol = 8)
 
   # Clean up
