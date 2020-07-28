@@ -108,6 +108,23 @@ extract_filter_where_in_value <- function(where){
 
 }
 
+#' Extract value from where not in filter in Power BI list
+#
+#' @param where A where not in element in Power BI list
+#' @return tibble
+#' @keywords filters, extract
+#' @examples
+#' \dontrun{
+#' pbiAssure:::extract_filter_where_not_in_value(RJSONIO::fromJSON(report$sections[[6]]$visualContainers[[4]]$filters)[[2]]$filter$Where[[1]])
+#' }
+extract_filter_where_not_in_value <- function(where){
+
+  lapply(where$Condition$Not$Expression$In$Values, function(x) {as.character(x[[1]]$`Literal`["Value"])}) %>%
+    paste(collapse = ",") %>%
+    paste0("c(", ., ")")
+
+}
+
 #' Extract value from where comparisson filter in Power BI list
 #
 #' @param where A where in element in Power BI list
@@ -160,6 +177,19 @@ extract_filter <- function(filters_element){
         dplyr::filter(filter_value != "c()") %>%
         dplyr::mutate(
           conc = paste0(filter_table, ".", filter_column, " in ", filter_value)
+        ) %>%
+        dplyr::filter(!is.na(filter_table))
+
+    } else if (condition_type == "Not") {
+
+      tibble::data_frame(
+        filter_table = if_null_na(filters_element$filter$From[[1]]["Entity"]),
+        filter_column = if_null_na(filters_element$filter$Where[[1]]$Condition$Not$Expression$In$Expressions[[1]]$Column$Property),
+        filter_value =  if_null_na(extract_filter_where_not_in_value(filters_element$filter$Where[[1]]))
+      ) %>%
+        dplyr::filter(filter_value != "c()") %>%
+        dplyr::mutate(
+          conc = paste0(filter_table, ".", filter_column, " not in ", filter_value)
         ) %>%
         dplyr::filter(!is.na(filter_table))
 
