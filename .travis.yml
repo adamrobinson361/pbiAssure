@@ -11,14 +11,14 @@ install:
  - choco install -y r --version 3.6.2
  - choco install -y rtools --version 3.5.0.4
  - choco install miktex --version=20.6.29.20200727
- - "export PATH=/c/Program\\ Files/MiKTeX\\ 20.6/miktex/bin/x64:$PATH"
+ - "export PATH=/c/Program\\ Files/MiKTeX/miktex/bin/x64:$PATH"
  - choco install -y pandoc
  - "export PATH=/c/Program\\ Files/R/R-3.6.2/bin/x64:/c/Rtools/bin:/c/RTools/mingw_64/bin:$PATH"
  - mkdir -p ${HOME}/Documents/R/win-library/3.6
  - export R_LIBS_USER=${HOME}/Documents/R/win-library/3.6
  - echo 'options(repos = c(CRAN = "https://cloud.r-project.org"))' > .Rprofile
  - Rscript -e 'Sys.getenv()'
- - Rscript -e 'list.files("C:/Program Files/MiKTeX")'
+ - Rscript -e 'list.files("C:/Program Files/MiKTeX/miktex")'
  - Rscript -e 'install.packages("devtools", type= "binary")'
  - Rscript -e 'devtools::install_deps(dependencies = TRUE, type = "binary")'
  
