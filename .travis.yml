@@ -1,4 +1,24 @@
-# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
+os: windows
+language: shell
 
-language: R
-cache: packages
+cache:
+    directories:
+    - $HOME/AppData/Local/Temp/chocolatey
+    - $HOME/AppData/Local/renv
+    - $TRAVIS_BUILD_DIR/renv/library
+
+install:
+ - choco install -y r --version 3.6.2
+ - choco install -y rtools --version 3.5.0.4
+ - choco install -y miktex --version=2.9.7079
+ - "export PATH=/c/Program\\ Files/MiKTeX\\ 2.9/miktex/bin/x64:$PATH"
+ - choco install -y pandoc
+ - "export PATH=/c/Program\\ Files/R/R-3.6.2/bin/x64:/c/Rtools/bin:/c/RTools/mingw_64/bin:$PATH"
+ - mkdir -p ${HOME}/Documents/R/win-library/3.6
+ - export R_LIBS_USER=${HOME}/Documents/R/win-library/3.6
+ - echo 'options(repos = c(CRAN = "https://cloud.r-project.org"))' > .Rprofile
+ - Rscript -e 'install.packages("devtools", type= "binary")'
+ 
+script:
+- R CMD build .
+- R CMD check *tar.gz --as-cran
