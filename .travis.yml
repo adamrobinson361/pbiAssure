@@ -18,7 +18,6 @@ install:
  - export R_LIBS_USER=${HOME}/Documents/R/win-library/3.6
  - echo 'options(repos = c(CRAN = "https://cloud.r-project.org"))' > .Rprofile
  - Rscript -e 'Sys.getenv()'
- - Rscript -e 'list.files("C:/Program Files/MiKTeX/miktex")'
  - Rscript -e 'install.packages("devtools", type= "binary")'
  - Rscript -e 'devtools::install_deps(dependencies = TRUE, type = "binary")'
  
