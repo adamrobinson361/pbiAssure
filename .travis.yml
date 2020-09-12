@@ -21,4 +21,4 @@ install:
  
 script:
 - R CMD build .
-- R CMD check *tar.gz --as-cran
+- R CMD check *tar.gz
