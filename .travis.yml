@@ -10,8 +10,8 @@ cache:
 install:
  - choco install -y r --version 3.6.2
  - choco install -y rtools --version 3.5.0.4
- - choco install -y miktex --version=20.7
- - "export PATH=/c/Program\\ Files/MiKTeX\\ 20.7/miktex/bin/x64:$PATH"
+ - choco install miktex --version=20.6.29.20200727
+ - "export PATH=/c/Program\\ Files/MiKTeX\\ 20.6/miktex/bin/x64:$PATH"
  - choco install -y pandoc
  - "export PATH=/c/Program\\ Files/R/R-3.6.2/bin/x64:/c/Rtools/bin:/c/RTools/mingw_64/bin:$PATH"
  - mkdir -p ${HOME}/Documents/R/win-library/3.6
