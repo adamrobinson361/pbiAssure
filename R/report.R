@@ -188,7 +188,8 @@ create_qa_report <- function(report, output_file = "pbi_qa_report.xlsx"){
     ) %>%
     # Manual quick fix for removing escape character causing problems
     dplyr::mutate(
-      visual_value = gsub("\31", "", visual_value)
+      visual_value = gsub("\31", "", visual_value),
+      visual_value = gsub("\30", "", visual_value)
     )
 
   validation_cells_visuals_summary_final <- which(grepl("correct|updates|changes|clear|differences|actioned", names(visuals_summary)))
