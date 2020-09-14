@@ -187,7 +187,7 @@ create_qa_report <- function(report, output_file = "pbi_qa_report.xlsx"){
       visual_report_owner_comment_final = NA
     ) %>%
     # Manual quick fix for removing escape character causing problems
-    mutate(
+    dplyr::mutate(
       visual_value = gsub("\31", "", visual_value)
     )
 
