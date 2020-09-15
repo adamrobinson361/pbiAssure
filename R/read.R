@@ -13,7 +13,7 @@ read_layout <- function(file){
 
   file1 <- readLines(file, warn = FALSE, skipNul = TRUE)
 
-  file1 <- iconv(file1, "windows-1252", "UTF-8")
+  #file1 <- iconv(file1, "windows-1252", "UTF-8")
 
   RJSONIO::fromJSON(file1, digits = 15)
 

@@ -1,7 +1,7 @@
 Package: pbiAssure
 Type: Package
 Title: This package creates quality assurance reports for Power BI files.
-Version: 0.0.0.9012
+Version: 0.0.0.9013
 Author: Adam Robinson
 Maintainer: Adam Robinson <adamrobinson361@gmail.com>
 Description: This reads and transforms the underlying json file from a Power BI
