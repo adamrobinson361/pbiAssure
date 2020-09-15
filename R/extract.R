@@ -311,15 +311,19 @@ create_sections_summary <- function(report){
 #' }
 extract_single_visual <- function(single_visual){
 
-  config_json <- RJSONIO::fromJSON(single_visual$config)
+  if (!is.null(single_visual$config)) {
 
-  tibble::tibble(
-    visual_id = config_json$name,
-    visual_type = config_json$singleVisual$`visualType`,
-    visual_title = if_null_na(config_json$singleVisual$vcObjects$title[[1]]$properties$text$expr$Literal["Value"]),
-    visual_value = if_null_na(extract_value(single_visual)),
-    visual_filters = extract_filters(single_visual)
+    config_json <- RJSONIO::fromJSON(gsub("\32", "", gsub('\32\32"', '', single_visual$config)))
+
+    tibble::tibble(
+      visual_id = config_json$name,
+      visual_type = config_json$singleVisual$`visualType`,
+      visual_title = if_null_na(config_json$singleVisual$vcObjects$title[[1]]$properties$text$expr$Literal["Value"]),
+      visual_value = if_null_na(extract_value(single_visual)),
+      visual_filters = extract_filters(single_visual)
     )
+
+  }
 
 }
 
@@ -375,7 +379,7 @@ create_visuals_summary <- function(report){
 #' }
 extract_textbox <- function(single_visual){
 
-  config_json <- RJSONIO::fromJSON(single_visual$config)
+  config_json <- RJSONIO::fromJSON(gsub("\32", "", gsub('\32\32"', '', single_visual$config)))
 
   if (length(config_json[["singleVisual"]][["visualType"]]) > 0){
 
@@ -404,7 +408,7 @@ extract_value <- function(single_visual){
 
   if (is.null(extract_textbox(single_visual))){
 
-    config_json <- RJSONIO::fromJSON(single_visual$config)
+    config_json <- RJSONIO::fromJSON(gsub("\32", "", gsub('\32\32"', '', single_visual$config)))
 
     projections <- config_json$singleVisual$projections
 

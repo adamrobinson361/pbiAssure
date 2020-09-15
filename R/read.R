@@ -11,11 +11,13 @@
 
 read_layout <- function(file){
 
-  file1 <- readLines(file, warn = FALSE, skipNul = TRUE)
+  file1 <- readLines(file, warn = FALSE, skipNul = TRUE, encoding = "windows-1252")
 
-  file1 <- iconv(file1, "windows-1252", "UTF-8")
+  file1 <- stringi::stri_enc_toascii(file1)
 
-  RJSONIO::fromJSON(file1, digits = 15)
+  file1 <- gsub("/", "", file1)
+
+  report <- RJSONIO::fromJSON(file1, digits = 15)
 
 }
 
