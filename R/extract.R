@@ -275,6 +275,7 @@ create_report_summary <- function(report){
 create_section_summary <- function(section){
 
   tibble::data_frame(
+    slide_number = ifelse(is.null(section$ordinal), 0, section$ordinal),
     slide_name = section$displayName,
     slide_filters = extract_filters(section)
     )
@@ -294,7 +295,9 @@ create_section_summary <- function(section){
 create_sections_summary <- function(report){
 
   lapply(report$sections, create_section_summary) %>%
-    dplyr::bind_rows()
+    dplyr::bind_rows() %>%
+    dplyr::arrange(slide_number) %>%
+    dplyr::select(-slide_number)
 
 }
 
@@ -311,15 +314,19 @@ create_sections_summary <- function(report){
 #' }
 extract_single_visual <- function(single_visual){
 
-  config_json <- RJSONIO::fromJSON(single_visual$config)
+  if (!is.null(single_visual$config)) {
 
-  tibble::tibble(
-    visual_id = config_json$name,
-    visual_type = config_json$singleVisual$`visualType`,
-    visual_title = if_null_na(config_json$singleVisual$vcObjects$title[[1]]$properties$text$expr$Literal["Value"]),
-    visual_value = if_null_na(extract_value(single_visual)),
-    visual_filters = extract_filters(single_visual)
+    config_json <- RJSONIO::fromJSON(gsub("\32", "", single_visual$config))
+
+    tibble::tibble(
+      visual_id = config_json$name,
+      visual_type = config_json$singleVisual$`visualType`,
+      visual_title = if_null_na(config_json$singleVisual$vcObjects$title[[1]]$properties$text$expr$Literal["Value"]),
+      visual_value = if_null_na(extract_value(single_visual)),
+      visual_filters = extract_filters(single_visual)
     )
+
+  }
 
 }
 
@@ -351,14 +358,20 @@ extract_section_visuals <- function(section){
 #' }
 create_visuals_summary <- function(report){
 
-  dfs <- lapply(report$sections, function(x){extract_section_visuals(x$visualContainers) %>% dplyr::mutate(slide_name = x$displayName)})
+  dfs <- lapply(report$sections, function(x){extract_section_visuals(x$visualContainers) %>%
+      dplyr::mutate(
+        slide_number = ifelse(is.null(x$ordinal), 0, x$ordinal),
+        slide_name = x$displayName
+        )})
 
   dfs_no_null <- dfs[lapply(dfs,length)>0]
 
   dfs_no_null %>%
     dplyr::bind_rows() %>%
-    dplyr::transmute(slide_name, visual_id, visual_type, visual_title, visual_value, visual_filters) %>%
-    dplyr::filter(!(visual_type %in% c("image", "slicer", "basicShape", "actionButton")))
+    dplyr::transmute(slide_number, slide_name, visual_id, visual_type, visual_title, visual_value, visual_filters) %>%
+    dplyr::filter(!(visual_type %in% c("image", "slicer", "basicShape", "actionButton"))) %>%
+    dplyr::arrange(slide_number) %>%
+    dplyr::select(-slide_number)
 
 }
 
@@ -375,7 +388,7 @@ create_visuals_summary <- function(report){
 #' }
 extract_textbox <- function(single_visual){
 
-  config_json <- RJSONIO::fromJSON(single_visual$config)
+  config_json <- RJSONIO::fromJSON(gsub("\32", "", single_visual$config))
 
   if (length(config_json[["singleVisual"]][["visualType"]]) > 0){
 
@@ -383,11 +396,15 @@ extract_textbox <- function(single_visual){
 
       paragraphs <- config_json$singleVisual$objects$general[[1]]$properties$paragraphs
 
-      lapply(paragraphs, function(x){x$textRuns[[1]][["value"]]}) %>%
+      lapply(paragraphs, function(x) {
+        lapply(x$textRuns, function(x) {
+          x[["value"]]
+        }) %>%
+          paste(collapse = "")
+      }) %>%
         paste(collapse = "\n")
-      }
 
-    }
+    }}
 
 }
 
@@ -404,7 +421,7 @@ extract_value <- function(single_visual){
 
   if (is.null(extract_textbox(single_visual))){
 
-    config_json <- RJSONIO::fromJSON(single_visual$config)
+    config_json <- RJSONIO::fromJSON(gsub("\32", "", single_visual$config))
 
     projections <- config_json$singleVisual$projections
 
