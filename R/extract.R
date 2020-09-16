@@ -297,7 +297,7 @@ create_sections_summary <- function(report){
   lapply(report$sections, create_section_summary) %>%
     dplyr::bind_rows() %>%
     dplyr::arrange(slide_number) %>%
-    select(-slide_number)
+    dplyr::select(-slide_number)
 
 }
 
@@ -371,7 +371,7 @@ create_visuals_summary <- function(report){
     dplyr::transmute(slide_number, slide_name, visual_id, visual_type, visual_title, visual_value, visual_filters) %>%
     dplyr::filter(!(visual_type %in% c("image", "slicer", "basicShape", "actionButton"))) %>%
     dplyr::arrange(slide_number) %>%
-    select(-slide_number)
+    dplyr::select(-slide_number)
 
 }
 
